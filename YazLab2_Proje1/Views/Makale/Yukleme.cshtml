@@ -1,0 +1,38 @@
+﻿@using YazLab2_Proje1.Models.Entity
+@{
+    ViewBag.Title = "Yukleme";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Makale Yükleme</h2>
+    <hr />
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info text-center">@TempData["Message"]</div>
+    }
+    @if (TempData["TrackingNumber"] != null)
+    {
+        <div class="alert alert-success text-center">
+            <strong>Takip Numarası:</strong> @TempData["TrackingNumber"]
+        </div>
+    }
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="Email" class="form-label">E-posta Adresiniz</label>
+                    <input type="email" class="form-control" id="Email" name="Email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="Makale" class="form-label">Makale (PDF Formatında)</label>
+                    <input type="file" class="form-control" id="Makale" name="Makale" accept=".pdf" required>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Makale Yükle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,694 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AnonimlestirmeSistemiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Tbl_Anonim">
+          <Key>
+            <PropertyRef Name="AnonimID" />
+          </Key>
+          <Property Name="AnonimID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrijinalArticleID" Type="int" />
+          <Property Name="AnonimFields" Type="text" />
+          <Property Name="AnonimFilePath" Type="varchar" MaxLength="500" />
+          <Property Name="AnonimTitle" Type="varchar" MaxLength="500" />
+          <Property Name="AnonimDate" Type="datetime" />
+          <Property Name="AnonimStatus" Type="varchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tbl_ArticleHakem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArticleID" Type="int" />
+          <Property Name="HakemID" Type="int" />
+        </EntityType>
+        <EntityType Name="Tbl_Articles">
+          <Key>
+            <PropertyRef Name="ArticleID" />
+          </Key>
+          <Property Name="ArticleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="Title" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="SubmissionDate" Type="datetime" />
+          <Property Name="Status" Type="nvarchar" MaxLength="500" />
+          <Property Name="TrackingNumber" Type="uniqueidentifier" />
+          <Property Name="Anonim" Type="bit" />
+        </EntityType>
+        <EntityType Name="Tbl_HakemIlgiAlani">
+          <Key>
+            <PropertyRef Name="HakemID" />
+            <PropertyRef Name="IlgiAlani" />
+          </Key>
+          <Property Name="HakemID" Type="int" Nullable="false" />
+          <Property Name="IlgiAlani" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tbl_Logs">
+          <Key>
+            <PropertyRef Name="LogID" />
+          </Key>
+          <Property Name="LogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArticleID" Type="int" />
+          <Property Name="LogDetails" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="LogDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Tbl_Messages">
+          <Key>
+            <PropertyRef Name="MessageID" />
+          </Key>
+          <Property Name="MessageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArticleID" Type="int" />
+          <Property Name="SenderID" Type="int" />
+          <Property Name="ReceiverID" Type="int" />
+          <Property Name="MessageContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="SentDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Tbl_Reviews">
+          <Key>
+            <PropertyRef Name="ReviewID" />
+          </Key>
+          <Property Name="ReviewID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArticleID" Type="int" />
+          <Property Name="ReviewerID" Type="int" />
+          <Property Name="Comment" Type="varchar(max)" />
+          <Property Name="ReviewDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Tbl_Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Role" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Tbl_Anonim_Tbl_Articles">
+          <End Role="Tbl_Articles" Type="Self.Tbl_Articles" Multiplicity="0..1" />
+          <End Role="Tbl_Anonim" Type="Self.Tbl_Anonim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Articles">
+              <PropertyRef Name="ArticleID" />
+            </Principal>
+            <Dependent Role="Tbl_Anonim">
+              <PropertyRef Name="OrijinalArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_ArticleHakem_Tbl_Anonim">
+          <End Role="Tbl_Anonim" Type="Self.Tbl_Anonim" Multiplicity="0..1" />
+          <End Role="Tbl_ArticleHakem" Type="Self.Tbl_ArticleHakem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Anonim">
+              <PropertyRef Name="AnonimID" />
+            </Principal>
+            <Dependent Role="Tbl_ArticleHakem">
+              <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_ArticleHakem_Tbl_Users">
+          <End Role="Tbl_Users" Type="Self.Tbl_Users" Multiplicity="0..1" />
+          <End Role="Tbl_ArticleHakem" Type="Self.Tbl_ArticleHakem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tbl_ArticleHakem">
+              <PropertyRef Name="HakemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_Articles_Tbl_Users">
+          <End Role="Tbl_Users" Type="Self.Tbl_Users" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Tbl_Articles" Type="Self.Tbl_Articles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tbl_Articles">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_HakemIlgiAlani_Tbl_Users">
+          <End Role="Tbl_Users" Type="Self.Tbl_Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Tbl_HakemIlgiAlani" Type="Self.Tbl_HakemIlgiAlani" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tbl_HakemIlgiAlani">
+              <PropertyRef Name="HakemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_Logs_Tbl_Articles">
+          <End Role="Tbl_Articles" Type="Self.Tbl_Articles" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Tbl_Logs" Type="Self.Tbl_Logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Articles">
+              <PropertyRef Name="ArticleID" />
+            </Principal>
+            <Dependent Role="Tbl_Logs">
+              <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_Messages_Tbl_Articles">
+          <End Role="Tbl_Articles" Type="Self.Tbl_Articles" Multiplicity="0..1" />
+          <End Role="Tbl_Messages" Type="Self.Tbl_Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Articles">
+              <PropertyRef Name="ArticleID" />
+            </Principal>
+            <Dependent Role="Tbl_Messages">
+              <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_Messages_Tbl_Users">
+          <End Role="Tbl_Users" Type="Self.Tbl_Users" Multiplicity="0..1" />
+          <End Role="Tbl_Messages" Type="Self.Tbl_Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tbl_Messages">
+              <PropertyRef Name="SenderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_Messages_Tbl_Users1">
+          <End Role="Tbl_Users" Type="Self.Tbl_Users" Multiplicity="0..1" />
+          <End Role="Tbl_Messages" Type="Self.Tbl_Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tbl_Messages">
+              <PropertyRef Name="ReceiverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_Reviews_Tbl_Users">
+          <End Role="Tbl_Users" Type="Self.Tbl_Users" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Tbl_Reviews" Type="Self.Tbl_Reviews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tbl_Reviews">
+              <PropertyRef Name="ReviewerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AnonimlestirmeSistemiModelStoreContainer">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_Anonim" EntityType="Self.Tbl_Anonim" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_ArticleHakem" EntityType="Self.Tbl_ArticleHakem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_Articles" EntityType="Self.Tbl_Articles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_HakemIlgiAlani" EntityType="Self.Tbl_HakemIlgiAlani" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_Logs" EntityType="Self.Tbl_Logs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_Messages" EntityType="Self.Tbl_Messages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_Reviews" EntityType="Self.Tbl_Reviews" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_Users" EntityType="Self.Tbl_Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Tbl_Anonim_Tbl_Articles" Association="Self.FK_Tbl_Anonim_Tbl_Articles">
+            <End Role="Tbl_Articles" EntitySet="Tbl_Articles" />
+            <End Role="Tbl_Anonim" EntitySet="Tbl_Anonim" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_ArticleHakem_Tbl_Anonim" Association="Self.FK_Tbl_ArticleHakem_Tbl_Anonim">
+            <End Role="Tbl_Anonim" EntitySet="Tbl_Anonim" />
+            <End Role="Tbl_ArticleHakem" EntitySet="Tbl_ArticleHakem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_ArticleHakem_Tbl_Users" Association="Self.FK_Tbl_ArticleHakem_Tbl_Users">
+            <End Role="Tbl_Users" EntitySet="Tbl_Users" />
+            <End Role="Tbl_ArticleHakem" EntitySet="Tbl_ArticleHakem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_Articles_Tbl_Users" Association="Self.FK_Tbl_Articles_Tbl_Users">
+            <End Role="Tbl_Users" EntitySet="Tbl_Users" />
+            <End Role="Tbl_Articles" EntitySet="Tbl_Articles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_HakemIlgiAlani_Tbl_Users" Association="Self.FK_Tbl_HakemIlgiAlani_Tbl_Users">
+            <End Role="Tbl_Users" EntitySet="Tbl_Users" />
+            <End Role="Tbl_HakemIlgiAlani" EntitySet="Tbl_HakemIlgiAlani" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_Logs_Tbl_Articles" Association="Self.FK_Tbl_Logs_Tbl_Articles">
+            <End Role="Tbl_Articles" EntitySet="Tbl_Articles" />
+            <End Role="Tbl_Logs" EntitySet="Tbl_Logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_Messages_Tbl_Articles" Association="Self.FK_Tbl_Messages_Tbl_Articles">
+            <End Role="Tbl_Articles" EntitySet="Tbl_Articles" />
+            <End Role="Tbl_Messages" EntitySet="Tbl_Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_Messages_Tbl_Users" Association="Self.FK_Tbl_Messages_Tbl_Users">
+            <End Role="Tbl_Users" EntitySet="Tbl_Users" />
+            <End Role="Tbl_Messages" EntitySet="Tbl_Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_Messages_Tbl_Users1" Association="Self.FK_Tbl_Messages_Tbl_Users1">
+            <End Role="Tbl_Users" EntitySet="Tbl_Users" />
+            <End Role="Tbl_Messages" EntitySet="Tbl_Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_Reviews_Tbl_Users" Association="Self.FK_Tbl_Reviews_Tbl_Users">
+            <End Role="Tbl_Users" EntitySet="Tbl_Users" />
+            <End Role="Tbl_Reviews" EntitySet="Tbl_Reviews" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AnonimlestirmeSistemiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Tbl_ArticleHakem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArticleID" Type="Int32" />
+          <Property Name="HakemID" Type="Int32" />
+          <NavigationProperty Name="Tbl_Users" Relationship="Self.FK_Tbl_ArticleHakem_Tbl_Users" FromRole="Tbl_ArticleHakem" ToRole="Tbl_Users" />
+          <NavigationProperty Name="Tbl_Anonim" Relationship="AnonimlestirmeSistemiModel.FK_Tbl_ArticleHakem_Tbl_Anonim" FromRole="Tbl_ArticleHakem" ToRole="Tbl_Anonim" />
+        </EntityType>
+        <EntityType Name="Tbl_Articles">
+          <Key>
+            <PropertyRef Name="ArticleID" />
+          </Key>
+          <Property Name="ArticleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FilePath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SubmissionDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TrackingNumber" Type="Guid" />
+          <Property Name="Anonim" Type="Boolean" />
+          <NavigationProperty Name="Tbl_Users" Relationship="Self.FK_Tbl_Articles_Tbl_Users" FromRole="Tbl_Articles" ToRole="Tbl_Users" />
+          <NavigationProperty Name="Tbl_Logs" Relationship="Self.FK_Tbl_Logs_Tbl_Articles" FromRole="Tbl_Articles" ToRole="Tbl_Logs" />
+          <NavigationProperty Name="Tbl_Anonim" Relationship="AnonimlestirmeSistemiModel.FK_Tbl_Anonim_Tbl_Articles" FromRole="Tbl_Articles" ToRole="Tbl_Anonim" />
+          <NavigationProperty Name="Tbl_Messages" Relationship="AnonimlestirmeSistemiModel.FK_Tbl_Messages_Tbl_Articles" FromRole="Tbl_Articles" ToRole="Tbl_Messages" />
+        </EntityType>
+        <EntityType Name="Tbl_HakemIlgiAlani">
+          <Key>
+            <PropertyRef Name="HakemID" />
+            <PropertyRef Name="IlgiAlani" />
+          </Key>
+          <Property Name="HakemID" Type="Int32" Nullable="false" />
+          <Property Name="IlgiAlani" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Tbl_Users" Relationship="Self.FK_Tbl_HakemIlgiAlani_Tbl_Users" FromRole="Tbl_HakemIlgiAlani" ToRole="Tbl_Users" />
+        </EntityType>
+        <EntityType Name="Tbl_Logs">
+          <Key>
+            <PropertyRef Name="LogID" />
+          </Key>
+          <Property Name="LogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArticleID" Type="Int32" />
+          <Property Name="LogDetails" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LogDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Tbl_Articles" Relationship="Self.FK_Tbl_Logs_Tbl_Articles" FromRole="Tbl_Logs" ToRole="Tbl_Articles" />
+        </EntityType>
+        <EntityType Name="Tbl_Messages">
+          <Key>
+            <PropertyRef Name="MessageID" />
+          </Key>
+          <Property Name="MessageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SenderID" Type="Int32" />
+          <Property Name="ReceiverID" Type="Int32" />
+          <Property Name="MessageContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SentDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Tbl_Users" Relationship="Self.FK_Tbl_Messages_Tbl_Users" FromRole="Tbl_Messages" ToRole="Tbl_Users" />
+          <NavigationProperty Name="Tbl_Users1" Relationship="Self.FK_Tbl_Messages_Tbl_Users1" FromRole="Tbl_Messages" ToRole="Tbl_Users" />
+          <Property Name="ArticleID" Type="Int32" />
+          <NavigationProperty Name="Tbl_Articles" Relationship="AnonimlestirmeSistemiModel.FK_Tbl_Messages_Tbl_Articles" FromRole="Tbl_Messages" ToRole="Tbl_Articles" />
+        </EntityType>
+        <EntityType Name="Tbl_Reviews">
+          <Key>
+            <PropertyRef Name="ReviewID" />
+          </Key>
+          <Property Name="ReviewID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArticleID" Type="Int32" />
+          <Property Name="ReviewerID" Type="Int32" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ReviewDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Tbl_Users" Relationship="Self.FK_Tbl_Reviews_Tbl_Users" FromRole="Tbl_Reviews" ToRole="Tbl_Users" />
+        </EntityType>
+        <EntityType Name="Tbl_Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Tbl_ArticleHakem" Relationship="Self.FK_Tbl_ArticleHakem_Tbl_Users" FromRole="Tbl_Users" ToRole="Tbl_ArticleHakem" />
+          <NavigationProperty Name="Tbl_Articles" Relationship="Self.FK_Tbl_Articles_Tbl_Users" FromRole="Tbl_Users" ToRole="Tbl_Articles" />
+          <NavigationProperty Name="Tbl_HakemIlgiAlani" Relationship="Self.FK_Tbl_HakemIlgiAlani_Tbl_Users" FromRole="Tbl_Users" ToRole="Tbl_HakemIlgiAlani" />
+          <NavigationProperty Name="Tbl_Messages" Relationship="Self.FK_Tbl_Messages_Tbl_Users" FromRole="Tbl_Users" ToRole="Tbl_Messages" />
+          <NavigationProperty Name="Tbl_Messages1" Relationship="Self.FK_Tbl_Messages_Tbl_Users1" FromRole="Tbl_Users" ToRole="Tbl_Messages" />
+          <NavigationProperty Name="Tbl_Reviews" Relationship="Self.FK_Tbl_Reviews_Tbl_Users" FromRole="Tbl_Users" ToRole="Tbl_Reviews" />
+        </EntityType>
+        <Association Name="FK_Tbl_ArticleHakem_Tbl_Users">
+          <End Role="Tbl_Users" Type="Self.Tbl_Users" Multiplicity="0..1" />
+          <End Role="Tbl_ArticleHakem" Type="Self.Tbl_ArticleHakem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tbl_ArticleHakem">
+              <PropertyRef Name="HakemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_Articles_Tbl_Users">
+          <End Role="Tbl_Users" Type="Self.Tbl_Users" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Tbl_Articles" Type="Self.Tbl_Articles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tbl_Articles">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_Logs_Tbl_Articles">
+          <End Role="Tbl_Articles" Type="Self.Tbl_Articles" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Tbl_Logs" Type="Self.Tbl_Logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Articles">
+              <PropertyRef Name="ArticleID" />
+            </Principal>
+            <Dependent Role="Tbl_Logs">
+              <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_HakemIlgiAlani_Tbl_Users">
+          <End Role="Tbl_Users" Type="Self.Tbl_Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Tbl_HakemIlgiAlani" Type="Self.Tbl_HakemIlgiAlani" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tbl_HakemIlgiAlani">
+              <PropertyRef Name="HakemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_Messages_Tbl_Users">
+          <End Role="Tbl_Users" Type="Self.Tbl_Users" Multiplicity="0..1" />
+          <End Role="Tbl_Messages" Type="Self.Tbl_Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tbl_Messages">
+              <PropertyRef Name="SenderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_Messages_Tbl_Users1">
+          <End Role="Tbl_Users" Type="Self.Tbl_Users" Multiplicity="0..1" />
+          <End Role="Tbl_Messages" Type="Self.Tbl_Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tbl_Messages">
+              <PropertyRef Name="ReceiverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_Reviews_Tbl_Users">
+          <End Role="Tbl_Users" Type="Self.Tbl_Users" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Tbl_Reviews" Type="Self.Tbl_Reviews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Tbl_Reviews">
+              <PropertyRef Name="ReviewerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AnonimlestirmeSistemiEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Tbl_ArticleHakem" EntityType="Self.Tbl_ArticleHakem" />
+          <EntitySet Name="Tbl_Articles" EntityType="Self.Tbl_Articles" />
+          <EntitySet Name="Tbl_HakemIlgiAlani" EntityType="Self.Tbl_HakemIlgiAlani" />
+          <EntitySet Name="Tbl_Logs" EntityType="Self.Tbl_Logs" />
+          <EntitySet Name="Tbl_Messages" EntityType="Self.Tbl_Messages" />
+          <EntitySet Name="Tbl_Reviews" EntityType="Self.Tbl_Reviews" />
+          <EntitySet Name="Tbl_Users" EntityType="Self.Tbl_Users" />
+          <AssociationSet Name="FK_Tbl_ArticleHakem_Tbl_Users" Association="Self.FK_Tbl_ArticleHakem_Tbl_Users">
+            <End Role="Tbl_Users" EntitySet="Tbl_Users" />
+            <End Role="Tbl_ArticleHakem" EntitySet="Tbl_ArticleHakem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_Articles_Tbl_Users" Association="Self.FK_Tbl_Articles_Tbl_Users">
+            <End Role="Tbl_Users" EntitySet="Tbl_Users" />
+            <End Role="Tbl_Articles" EntitySet="Tbl_Articles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_Logs_Tbl_Articles" Association="Self.FK_Tbl_Logs_Tbl_Articles">
+            <End Role="Tbl_Articles" EntitySet="Tbl_Articles" />
+            <End Role="Tbl_Logs" EntitySet="Tbl_Logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_HakemIlgiAlani_Tbl_Users" Association="Self.FK_Tbl_HakemIlgiAlani_Tbl_Users">
+            <End Role="Tbl_Users" EntitySet="Tbl_Users" />
+            <End Role="Tbl_HakemIlgiAlani" EntitySet="Tbl_HakemIlgiAlani" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_Messages_Tbl_Users" Association="Self.FK_Tbl_Messages_Tbl_Users">
+            <End Role="Tbl_Users" EntitySet="Tbl_Users" />
+            <End Role="Tbl_Messages" EntitySet="Tbl_Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_Messages_Tbl_Users1" Association="Self.FK_Tbl_Messages_Tbl_Users1">
+            <End Role="Tbl_Users" EntitySet="Tbl_Users" />
+            <End Role="Tbl_Messages" EntitySet="Tbl_Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_Reviews_Tbl_Users" Association="Self.FK_Tbl_Reviews_Tbl_Users">
+            <End Role="Tbl_Users" EntitySet="Tbl_Users" />
+            <End Role="Tbl_Reviews" EntitySet="Tbl_Reviews" />
+          </AssociationSet>
+          <EntitySet Name="Tbl_Anonim" EntityType="AnonimlestirmeSistemiModel.Tbl_Anonim" />
+          <AssociationSet Name="FK_Tbl_Anonim_Tbl_Articles" Association="AnonimlestirmeSistemiModel.FK_Tbl_Anonim_Tbl_Articles">
+            <End Role="Tbl_Articles" EntitySet="Tbl_Articles" />
+            <End Role="Tbl_Anonim" EntitySet="Tbl_Anonim" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_Messages_Tbl_Articles" Association="AnonimlestirmeSistemiModel.FK_Tbl_Messages_Tbl_Articles">
+            <End Role="Tbl_Articles" EntitySet="Tbl_Articles" />
+            <End Role="Tbl_Messages" EntitySet="Tbl_Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tbl_ArticleHakem_Tbl_Anonim" Association="AnonimlestirmeSistemiModel.FK_Tbl_ArticleHakem_Tbl_Anonim">
+            <End Role="Tbl_Anonim" EntitySet="Tbl_Anonim" />
+            <End Role="Tbl_ArticleHakem" EntitySet="Tbl_ArticleHakem" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Tbl_Anonim">
+          <Key>
+            <PropertyRef Name="AnonimID" />
+          </Key>
+          <Property Name="AnonimID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrijinalArticleID" Type="Int32" />
+          <Property Name="AnonimFields" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AnonimFilePath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AnonimTitle" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AnonimDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Tbl_Articles" Relationship="AnonimlestirmeSistemiModel.FK_Tbl_Anonim_Tbl_Articles" FromRole="Tbl_Anonim" ToRole="Tbl_Articles" />
+          <NavigationProperty Name="Tbl_ArticleHakem" Relationship="AnonimlestirmeSistemiModel.FK_Tbl_ArticleHakem_Tbl_Anonim" FromRole="Tbl_Anonim" ToRole="Tbl_ArticleHakem" />
+          <Property Name="AnonimStatus" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_Tbl_Anonim_Tbl_Articles">
+          <End Type="AnonimlestirmeSistemiModel.Tbl_Articles" Role="Tbl_Articles" Multiplicity="0..1" />
+          <End Type="AnonimlestirmeSistemiModel.Tbl_Anonim" Role="Tbl_Anonim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Articles">
+              <PropertyRef Name="ArticleID" />
+            </Principal>
+            <Dependent Role="Tbl_Anonim">
+              <PropertyRef Name="OrijinalArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_Messages_Tbl_Articles">
+          <End Type="AnonimlestirmeSistemiModel.Tbl_Articles" Role="Tbl_Articles" Multiplicity="0..1" />
+          <End Type="AnonimlestirmeSistemiModel.Tbl_Messages" Role="Tbl_Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Articles">
+              <PropertyRef Name="ArticleID" />
+            </Principal>
+            <Dependent Role="Tbl_Messages">
+              <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tbl_ArticleHakem_Tbl_Anonim">
+          <End Type="AnonimlestirmeSistemiModel.Tbl_Anonim" Role="Tbl_Anonim" Multiplicity="0..1" />
+          <End Type="AnonimlestirmeSistemiModel.Tbl_ArticleHakem" Role="Tbl_ArticleHakem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Anonim">
+              <PropertyRef Name="AnonimID" />
+            </Principal>
+            <Dependent Role="Tbl_ArticleHakem">
+              <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AnonimlestirmeSistemiModelStoreContainer" CdmEntityContainer="AnonimlestirmeSistemiEntities">
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="AnonimlestirmeSistemiModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_ArticleHakem">
+            <EntityTypeMapping TypeName="AnonimlestirmeSistemiModel.Tbl_ArticleHakem">
+              <MappingFragment StoreEntitySet="Tbl_ArticleHakem">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+                <ScalarProperty Name="HakemID" ColumnName="HakemID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_Articles">
+            <EntityTypeMapping TypeName="AnonimlestirmeSistemiModel.Tbl_Articles">
+              <MappingFragment StoreEntitySet="Tbl_Articles">
+                <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TrackingNumber" ColumnName="TrackingNumber" />
+                <ScalarProperty Name="Anonim" ColumnName="Anonim" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_HakemIlgiAlani">
+            <EntityTypeMapping TypeName="AnonimlestirmeSistemiModel.Tbl_HakemIlgiAlani">
+              <MappingFragment StoreEntitySet="Tbl_HakemIlgiAlani">
+                <ScalarProperty Name="HakemID" ColumnName="HakemID" />
+                <ScalarProperty Name="IlgiAlani" ColumnName="IlgiAlani" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_Logs">
+            <EntityTypeMapping TypeName="AnonimlestirmeSistemiModel.Tbl_Logs">
+              <MappingFragment StoreEntitySet="Tbl_Logs">
+                <ScalarProperty Name="LogID" ColumnName="LogID" />
+                <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+                <ScalarProperty Name="LogDetails" ColumnName="LogDetails" />
+                <ScalarProperty Name="LogDate" ColumnName="LogDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_Messages">
+            <EntityTypeMapping TypeName="AnonimlestirmeSistemiModel.Tbl_Messages">
+              <MappingFragment StoreEntitySet="Tbl_Messages">
+                <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+                <ScalarProperty Name="MessageID" ColumnName="MessageID" />
+                <ScalarProperty Name="SenderID" ColumnName="SenderID" />
+                <ScalarProperty Name="ReceiverID" ColumnName="ReceiverID" />
+                <ScalarProperty Name="MessageContent" ColumnName="MessageContent" />
+                <ScalarProperty Name="SentDate" ColumnName="SentDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_Reviews">
+            <EntityTypeMapping TypeName="AnonimlestirmeSistemiModel.Tbl_Reviews">
+              <MappingFragment StoreEntitySet="Tbl_Reviews">
+                <ScalarProperty Name="ReviewID" ColumnName="ReviewID" />
+                <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+                <ScalarProperty Name="ReviewerID" ColumnName="ReviewerID" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="ReviewDate" ColumnName="ReviewDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_Users">
+            <EntityTypeMapping TypeName="AnonimlestirmeSistemiModel.Tbl_Users">
+              <MappingFragment StoreEntitySet="Tbl_Users">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_Anonim">
+            <EntityTypeMapping TypeName="AnonimlestirmeSistemiModel.Tbl_Anonim">
+              <MappingFragment StoreEntitySet="Tbl_Anonim">
+                <ScalarProperty Name="AnonimStatus" ColumnName="AnonimStatus" />
+                <ScalarProperty Name="AnonimDate" ColumnName="AnonimDate" />
+                <ScalarProperty Name="AnonimTitle" ColumnName="AnonimTitle" />
+                <ScalarProperty Name="AnonimFilePath" ColumnName="AnonimFilePath" />
+                <ScalarProperty Name="AnonimFields" ColumnName="AnonimFields" />
+                <ScalarProperty Name="OrijinalArticleID" ColumnName="OrijinalArticleID" />
+                <ScalarProperty Name="AnonimID" ColumnName="AnonimID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

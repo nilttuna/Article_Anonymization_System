@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "Tespit Edilen Bilgiler";
+    var makale = ViewBag.Makale;
+    var tespitler = ViewBag.Tespitler as IEnumerable<dynamic>;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    var yazarlar = tespitler.Where(x => x.type == "PERSON").Select(x => (string)x.text).Distinct();
+    var kurumlar = tespitler.Where(x => x.type == "ORG" || x.type == "INSTITUTION" || x.type == "TURKISH_UNIVERSITY")
+                            .Select(x => (string)x.text).Distinct();
+    var epostalar = tespitler.Where(x => x.type == "EMAIL").Select(x => (string)x.text).Distinct();
+}
+
+<h3>@makale.Title - Tespit Edilen Bilgiler</h3>
+
+<form method="post" action="@Url.Action("Anonimlestir", "Yonetici")">
+    <input type="hidden" name="makaleID" value="@makale.ArticleID" />
+
+    <div class="row mt-3">
+        <!-- Yazarlar -->
+        <div class="col-md-4">
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header bg-dark text-white">Yazarlar (Ad Soyad)</div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach (var ad in yazarlar)
+                        {
+                            <li class="list-group-item">@ad</li>
+                        }
+                        @if (!yazarlar.Any())
+                        {
+                            <li class="list-group-item text-muted">Tespit edilemedi</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kurumlar -->
+        <div class="col-md-4">
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header bg-primary text-white">Kurumlar</div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach (var kurum in kurumlar)
+                        {
+                            <li class="list-group-item">@kurum</li>
+                        }
+                        @if (!kurumlar.Any())
+                        {
+                            <li class="list-group-item text-muted">Tespit edilemedi</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- E-Postalar -->
+        <div class="col-md-4">
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header bg-info text-white">E-Postalar</div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach (var mail in epostalar)
+                        {
+                            <li class="list-group-item">@mail</li>
+                        }
+                        @if (!epostalar.Any())
+                        {
+                            <li class="list-group-item text-muted">Tespit edilemedi</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <h5>🛡 Anonimleştirilecek Bilgi Türleri</h5>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="types" value="PERSON" id="chkPerson" checked />
+        <label class="form-check-label" for="chkPerson">Yazar Ad Soyad</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="types" value="EMAIL" id="chkEmail" checked />
+        <label class="form-check-label" for="chkEmail">E-Posta</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="types" value="ORG" id="chkOrg" checked />
+        <label class="form-check-label" for="chkOrg">Kurum</label>
+    </div>
+
+    <button type="submit" class="btn btn-danger mt-4">🔒 Anonimleştir</button>
+</form>

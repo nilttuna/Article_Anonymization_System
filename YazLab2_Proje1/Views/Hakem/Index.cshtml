@@ -1,0 +1,163 @@
+﻿@using YazLab2_Proje1.Models.Entity;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Hakem Paneli";
+}
+
+<div class="container mt-5">
+    <input type="hidden" id="HakemID" name="HakemID" value="@ViewBag.HakemID" />
+    <h2 class="text-center">Hakem Paneli</h2>
+    <p>Hakem ID: @ViewBag.HakemID</p>
+    <hr />
+    @if (TempData["Mesaj"] != null)
+    {
+        <div class="alert alert-success mt-3">@TempData["Mesaj"]</div>
+    }
+
+    <!-- Atanan Anonim Makaleler -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            Atanan Anonim Makaleler
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                @if (ViewBag.AnonimMakaleler != null)
+                {
+                    foreach (var makale in ViewBag.AnonimMakaleler)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @makale.AnonimTitle
+                            <div>
+                                <button class="btn btn-sm btn-secondary" onclick="makaleSec('@makale.AnonimID', '@makale.AnonimTitle')">Seç</button>
+                                <a href="@makale.AnonimFilePath?v=@DateTime.Now.Ticks" target="_blank" class="btn btn-sm btn-info">Görüntüle</a>
+                            </div>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="list-group-item">Bu hakeme atanmış makale bulunmamaktadır.</li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <!-- Değerlendirme Yazma Alanı (Seçilen Makale Otomatik Geliyor) -->
+    <div id="degerlendirmeAlani" class="mt-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                Makale Değerlendirme Alanı
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <!-- Seçilen Makale Bilgisi -->
+                    <h5 id="makaleAdi">Seçilen Makale: (Henüz Seçilmedi)</h5>
+                    <input type="hidden" id="SeciliMakale" name="MakaleId">
+
+                    <hr>
+
+                    <!-- Yorum Metni -->
+                    <div class="mb-3">
+                        <label for="YorumMetni" class="form-label">Yorum</label>
+                        <textarea class="form-control" id="YorumMetni" name="YorumMetni" rows="3" placeholder="Makale hakkında yorumunuzu yazın..." required></textarea>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" onclick="yorumKaydet()">Yorumu Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <form id="yorumForm" method="post" action="/Hakem/YorumKaydet">
+        <input type="hidden" id="SeciliMakale" name="MakaleId">
+
+
+        <!-- Yorumlar Listesi -->
+        <div id="yorumlarAlani" class="mt-4">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    Seçili Makalenin Yorumları
+                </div>
+                <div class="card-body">
+                    <ul id="yorumListesi" class="list-group">
+                        <li class="list-group-item">Henüz yorum eklenmedi.</li>
+                    </ul>
+                    <button type="button" class="btn btn-success mt-3" onclick="yorumlariGonder()">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form method="post" action="/Hakem/DurumGuncelle" class="mt-3">
+        <input type="hidden" name="MakaleId" id="DurumMakaleId" />
+        <button type="submit" name="Durum" value="Revize İstendi" class="btn btn-warning">Revize İste</button>
+        <button type="submit" name="Durum" value="Tamamlandı" class="btn btn-info">Editöre Gönder (Tamamlandı)</button>
+    </form>
+
+
+</div>
+
+<script>
+    function makaleSec(makaleId, makaleAdi) {
+        document.getElementById("SeciliMakale").value = makaleId;
+        document.getElementById("makaleAdi").innerText = "Seçilen Makale: " + makaleAdi;
+        document.getElementById("yorumListesi").innerHTML = "";
+        document.getElementById("DurumMakaleId").value = makaleId;
+
+    }
+
+    function yorumKaydet() {
+        var seciliMakale = document.getElementById("SeciliMakale").value;
+        var yorumMetni = document.getElementById("YorumMetni").value;
+        var yorumListesi = document.getElementById("yorumListesi");
+
+        if (!seciliMakale) {
+            alert("Lütfen önce bir makale seçin.");
+            return;
+        }
+
+        if (yorumMetni.trim() !== "") {
+            var yeniYorum = document.createElement("li");
+            yeniYorum.className = "list-group-item";
+            yeniYorum.innerText = yorumMetni;
+            yorumListesi.appendChild(yeniYorum);
+            document.getElementById("YorumMetni").value = "";
+        }
+    }
+    function yorumlariGonder() {
+        var seciliMakale = document.getElementById("SeciliMakale").value;
+        if (!seciliMakale) {
+            alert("Lütfen önce bir makale seçin.");
+            return;
+        }
+
+        var yorumListesi = document.querySelectorAll("#yorumListesi li");
+        var yorumlar = [];
+
+        yorumListesi.forEach(function (li) {
+            yorumlar.push(li.innerText);
+        });
+
+        var hakemID = document.getElementById("HakemID").value;
+
+        var formData = new FormData();
+        formData.append("MakaleId", seciliMakale);
+        formData.append("HakemID", hakemID);
+        yorumlar.forEach((yorum, index) => {
+            formData.append("Yorumlar[" + index + "]", yorum);
+        });
+
+        fetch('/Hakem/YorumKaydet', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Yorumlar başarıyla kaydedildi.");
+                    window.location.reload();
+                } else {
+                    alert("Yorum kaydedilirken hata oluştu.");
+                }
+            });
+    }
+</script>

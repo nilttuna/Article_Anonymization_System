@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ea993115b956487d9a79484618e52118" Name="Diagram1" ZoomLevel="63">
+        <EntityTypeShape EntityType="AnonimlestirmeSistemiModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnonimlestirmeSistemiModel.Tbl_ArticleHakem" Width="1.5" PointX="5.25" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnonimlestirmeSistemiModel.Tbl_Articles" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnonimlestirmeSistemiModel.Tbl_HakemIlgiAlani" Width="1.5" PointX="3" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnonimlestirmeSistemiModel.Tbl_Logs" Width="1.5" PointX="5.25" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnonimlestirmeSistemiModel.Tbl_Messages" Width="1.5" PointX="3" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnonimlestirmeSistemiModel.Tbl_Reviews" Width="1.5" PointX="3" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnonimlestirmeSistemiModel.Tbl_Users" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <AssociationConnector Association="AnonimlestirmeSistemiModel.FK_Tbl_ArticleHakem_Tbl_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="AnonimlestirmeSistemiModel.FK_Tbl_Articles_Tbl_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="AnonimlestirmeSistemiModel.FK_Tbl_Logs_Tbl_Articles" ManuallyRouted="false" />
+        <AssociationConnector Association="AnonimlestirmeSistemiModel.FK_Tbl_HakemIlgiAlani_Tbl_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="AnonimlestirmeSistemiModel.FK_Tbl_Messages_Tbl_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="AnonimlestirmeSistemiModel.FK_Tbl_Messages_Tbl_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="AnonimlestirmeSistemiModel.FK_Tbl_Reviews_Tbl_Users" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="AnonimlestirmeSistemiModel.Tbl_Anonim" Width="1.5" PointX="5.25" PointY="3.125" />
+        <AssociationConnector Association="AnonimlestirmeSistemiModel.FK_Tbl_Anonim_Tbl_Articles" />
+        <AssociationConnector Association="AnonimlestirmeSistemiModel.FK_Tbl_Messages_Tbl_Articles" />
+        <AssociationConnector Association="AnonimlestirmeSistemiModel.FK_Tbl_ArticleHakem_Tbl_Anonim" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

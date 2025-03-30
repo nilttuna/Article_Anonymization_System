@@ -1,0 +1,56 @@
+﻿@model YazLab2_Proje1.Models.Entity.Tbl_Articles
+
+@{
+    ViewBag.Title = "Makale Detayı";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>📄 Makale Detayı</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title text-center">@Model.Title</h4>
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>📅 Yükleme Tarihi:</strong> @(Model.SubmissionDate.HasValue ? Model.SubmissionDate.Value.ToShortDateString() : "Bilinmiyor")</p>
+                            <p><strong>🔍 Durum:</strong> <span class="badge bg-info text-dark">@Model.Status</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                <strong>🔒 Anonimleştirilmiş:</strong>
+                                <span class="badge @(Model.Anonim.HasValue && Model.Anonim.Value ? "bg-success" : "bg-danger")">
+                                    @(Model.Anonim.HasValue && Model.Anonim.Value ? "Evet" : "Hayır")
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="text-center">
+                        @if (!string.IsNullOrEmpty(Model.FilePath))
+                        {
+                            <a href="@Url.Content(Model.FilePath)?v=@DateTime.Now.Ticks" target="_blank" class="btn btn-outline-primary btn-lg">
+                                📂 Makaleyi Aç
+                            </a>
+                        }
+                        else
+                        {
+                            <p class="text-danger">❌ Dosya bulunamadı.</p>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">🔙 Ana Sayfaya Dön</a>
+                    <a href="@Url.Action("Messages", "Message", new { articleId = Model.ArticleID })" class="btn btn-primary">💬 Editörle Mesajlaş</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

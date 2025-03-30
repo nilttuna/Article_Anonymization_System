@@ -1,0 +1,48 @@
+﻿@model List<YazLab2_Proje1.Models.Entity.Tbl_Messages>
+
+@{
+    ViewBag.Title = "Mesajlaşma";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>💬 Editörle Mesajlaş</h3>
+                </div>
+                <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var message in Model)
+                        {
+                            <div class="message text-@(message.SenderID == ViewBag.UserId ? "end" : "start") mb-3">
+                                <div class="alert @(message.SenderID == ViewBag.UserId ? "alert-primary" : "alert-secondary") d-inline-block">
+                                    <strong>@(message.SenderID == ViewBag.UserId ? "📝 Siz" : "📩 Editör")</strong><br />
+                                    @message.MessageContent
+                                    <br /><small class="text-muted">
+                                        @(message.SentDate.HasValue ? message.SentDate.Value.ToString("dd/MM/yyyy HH:mm") : "Tarih Bilinmiyor")
+                                    </small>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">Henüz mesaj bulunmamaktadır.</p>
+                    }
+                </div>
+                <div class="card-footer">
+                    <form method="post" action="@Url.Action("UserSendMessage", "Message")">
+                        <input type="hidden" name="ArticleID" value="@ViewBag.ArticleID" />
+                        <input type="hidden" name="SenderID" value="@ViewBag.UserId" />
+                        <input type="hidden" name="ReceiverID" value="@ViewBag.AdminId" />
+                        <textarea name="MessageContent" class="form-control" rows="2" placeholder="Mesajınızı yazın..." required></textarea>
+                        <button type="submit" class="btn btn-success mt-2 w-100">📨 Gönder</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

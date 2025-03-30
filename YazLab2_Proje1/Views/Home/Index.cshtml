@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Ana Sayfa";
+}
+
+<div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 70vh; margin-top: -50px;">
+    <h1 class="mb-4 text-center">Makale Değerlendirme Sistemi</h1>
+
+    <div class="d-flex gap-3">
+        <a href="@Url.Action("Yukleme", "Makale")" class="btn btn-primary btn-lg">
+            Makale Yükle
+        </a>
+        <a href="@Url.Action("Sorgulama", "Makale")" class="btn btn-secondary btn-lg">
+            Makale Durumu Sorgula
+        </a>
+    </div>
+</div>
