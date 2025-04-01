@@ -127,7 +127,6 @@ namespace YazLab2_Proje1.Controllers
 
             Debug.WriteLine("Python'a gönderilen PDF Yolu: " + pdfPath);
 
-            // Python betiğini çalıştırarak makaledeki anahtar kelimeleri al
             string jsonResponse = RunPythonScript(pdfPath);
             Debug.WriteLine("Python Çıktısı: " + jsonResponse);
 
@@ -375,7 +374,6 @@ namespace YazLab2_Proje1.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Dosya adını düzenle: Title_orijinal{id}.pdf
             string dosyaAdi = $"{orijinalMakale.Title}_orijinal{orijinalMakale.ArticleID}.pdf";
             string dosyaKlasoru = Path.GetDirectoryName(Server.MapPath(orijinalMakale.FilePath));
             string orijinalPath = Path.Combine(dosyaKlasoru, dosyaAdi);
@@ -383,12 +381,12 @@ namespace YazLab2_Proje1.Controllers
             // PDF içeriğini orijinal dosya yoluna yaz
             System.IO.File.WriteAllBytes(orijinalPath, restoredPdf);
 
-            // Veritabanı güncellemeleri
             orijinalMakale.FilePath = "/" + Path.Combine("MakaleDosyalari", dosyaAdi).Replace("\\", "/");
 
             orijinalMakale.Status = anonimMakale.AnonimStatus;
             orijinalMakale.SubmissionDate = DateTime.Now;
             orijinalMakale.Anonim = false;
+            orijinalMakale.Title = dosyaAdi;
 
             if (System.IO.File.Exists(anonimDosyaPath))
             {

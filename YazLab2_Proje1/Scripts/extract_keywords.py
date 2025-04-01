@@ -29,21 +29,21 @@ def ngram_olustur(kelimeler, n):
 
 def anahtar_kelime_cikar(metin):
     """Metinden en sık geçen anlamlı anahtar kelimeleri çıkarır."""
-    stop_words = set(stopwords.words("english"))  # İngilizce stopwords listesini kullan
+    stop_words = set(stopwords.words("english"))  
     kelimeler = metin.lower().split()
 
-    # Noktalama işaretlerini ve gereksiz kelimeleri filtrele
+    
     temiz_kelime_listesi = [
         kelime.strip(string.punctuation)
         for kelime in kelimeler
-        if kelime not in stop_words and kelime.isalpha()  # Sadece harflerden oluşan kelimeleri al
+        if kelime not in stop_words and kelime.isalpha()  
     ]
 
-    # En sık geçen anlamlı kelimeleri belirle
+    
     kelime_sayaci = Counter(temiz_kelime_listesi)
     tekil_kelime_listesi = [kelime for kelime, _ in kelime_sayaci.most_common(10)]
 
-    # Bigram ve trigram terimleri manuel oluşturalım
+    
     bigram_listesi = ngram_olustur(temiz_kelime_listesi, 2)
     trigram_listesi = ngram_olustur(temiz_kelime_listesi, 3)
 
@@ -53,7 +53,7 @@ def anahtar_kelime_cikar(metin):
     en_fazla_gecen_bigramlar = [bigram for bigram, _ in bigram_sayaci.most_common(5)]
     en_fazla_gecen_trigramlar = [trigram for trigram, _ in trigram_sayaci.most_common(5)]
 
-    # Hem tekil kelimeler, hem bigram, hem de trigramları döndür
+    
     return tekil_kelime_listesi + en_fazla_gecen_bigramlar + en_fazla_gecen_trigramlar
 
 def alan_atama(anahtar_kelimeler):
@@ -79,7 +79,7 @@ def alan_atama(anahtar_kelimeler):
         }
     }
 
-    # Eşleşen başlıkları ve ana alanları sakla
+    
     eslesen_basliklar = {}
     ana_alan_eslesme_sayilari = {}
 
@@ -93,7 +93,7 @@ def alan_atama(anahtar_kelimeler):
                 else:
                     ana_alan_eslesme_sayilari[alan] = eslesme_sayisi
 
-    # En iyi eşleşen ana alanı bul (en çok eşleşme alan)
+    
     if ana_alan_eslesme_sayilari:
         en_iyi_alan = max(ana_alan_eslesme_sayilari, key=ana_alan_eslesme_sayilari.get)
     else:

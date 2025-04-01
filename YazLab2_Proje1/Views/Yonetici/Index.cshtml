@@ -255,7 +255,7 @@
                     type: 'POST',
                     data: { makaleID: makaleID },  // Anonim makale ID gönderiyoruz
                     beforeSend: function () {
-                        $("#HakemSec").html('<option>Yükleniyor...</option>'); // Yükleniyor göstergesi
+                        $("#HakemSec").html('<option>Yükleniyor...</option>'); 
                     },
                     success: function (response) {
                         console.log("Gelen veriler:", response); // Konsolda JSON verisini göster
